@@ -1229,6 +1229,7 @@ oxm_types = [
     # EXT-233 Output match Extension
     # NOTE(yamamoto): The spec says uint64_t but I assume it's an error.
     oxm_fields.ONFExperimenter('actset_output', 43, type_desc.Int4),
+    oxm_fields.NvidiaExperimenter('rtp_timestamp', 126, type_desc.Int4),
 ] + nicira_ext.oxm_types
 
 oxm_fields.generate(__name__)

@@ -113,6 +113,8 @@ class _Experimenter(_OxmClass):
         self.num = (self.experimenter_id, self.oxm_type)
         self.exp_type = self.oxm_field
 
+class NvidiaExperimenter(_Experimenter):
+    experimenter_id = ofproto_common.NVIDIA_EXPERIMENTER_ID
 
 class ONFExperimenter(_Experimenter):
     experimenter_id = ofproto_common.ONF_EXPERIMENTER_ID

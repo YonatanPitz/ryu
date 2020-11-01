@@ -195,6 +195,7 @@ def to_match(dp, attrs):
     convert = {'in_port': UTIL.ofp_port_from_user,
                'in_phy_port': str_to_int,
                'metadata': ofctl_utils.to_match_masked_int,
+               'rtp_timestamp': ofctl_utils.to_match_masked_int,
                'dl_dst': ofctl_utils.to_match_eth,
                'dl_src': ofctl_utils.to_match_eth,
                'eth_dst': ofctl_utils.to_match_eth,

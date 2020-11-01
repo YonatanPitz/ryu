@@ -889,8 +889,9 @@ class OFPMatch(StringifyMixin):
             # eg.
             #   OFPMatch(eth_src=('ff:ff:ff:00:00:00'), eth_type=0x800,
             #            ipv4_src='10.0.0.1')
-            kwargs = dict(ofproto.oxm_normalize_user(k, v) for
-                          (k, v) in kwargs.items())
+            kwargs = dict(ofproto.oxm_normalize_user(k, v)
+                          if k != "rtp_timestamp" else (k, v)
+                          for (k, v) in kwargs.items())
             fields = [ofproto.oxm_from_user(k, v) for (k, v)
                       in kwargs.items()]
             # assumption: sorting by OXM type values makes fields
