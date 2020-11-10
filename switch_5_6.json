@@ -1,28 +1,40 @@
 {
-    "before_switch": {
-        "match":{
-            "in_port": 20544, 
-            "eth_type": 2048,
-            "ipv4_dst": "20.0.0.6",
-            "ipv4_src": "20.0.0.5"
-        },
-        "actions":[
-        {
-            "type": "OUTPUT",
-            "port": 20560
+    "groups": [
+    {
+        "group_id": 2,
+        "type": "ALL",
+        "buckets": [{
+            "actions":[
+            {
+                "type": "SET_FIELD",
+                "field": "ipv4_dst",
+                "value": "20.0.0.7"
+            },
+            {
+                "type": "OUTPUT",
+                "port": 20576
+            }]
         }]
+    }],
+    "flows": [
+    {
+        "match":{
+            "in_port": 20560, 
+            "eth_type": 2048,
+            "ipv4_dst": "20.0.0.6"
+        },
+        "new_actions": [{}]
     },
-    "after_switch": {
+    {
         "match":{
             "in_port": 20544, 
             "eth_type": 2048,
-            "ipv4_dst": "20.0.0.6",
-            "ipv4_src": "20.0.0.5"
+            "ipv4_dst": "20.0.0.6"
         },
-        "actions":[
-        {
-            "type": "OUTPUT",
-            "port": 20576
+        "new_actions":
+        [{
+            "type": "GROUP",
+            "group_id": 2
         }]
-    }
+    }]
 }
