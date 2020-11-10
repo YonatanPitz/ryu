@@ -1,0 +1,28 @@
+{
+    "before_switch": {
+        "match":{
+            "in_port": 20544, 
+            "eth_type": 2048,
+            "ipv4_dst": "20.0.0.6",
+            "ipv4_src": "20.0.0.5"
+        },
+        "actions":[
+        {
+            "type": "OUTPUT",
+            "port": 20560
+        }]
+    },
+    "after_switch": {
+        "match":{
+            "in_port": 20544, 
+            "eth_type": 2048,
+            "ipv4_dst": "20.0.0.6",
+            "ipv4_src": "20.0.0.5"
+        },
+        "actions":[
+        {
+            "type": "OUTPUT",
+            "port": 20576
+        }]
+    }
+}
