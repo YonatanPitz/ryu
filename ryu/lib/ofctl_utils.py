@@ -196,7 +196,7 @@ def to_match_vid(value, ofpvid_present):
 
 
 def to_match_masked_int(value):
-    if isinstance(value, str) and '/' in value:
+    if (isinstance(value, str) or isinstance(value, unicode)) and '/' in value:
         value = value.split('/')
         return str_to_int(value[0]), str_to_int(value[1])
 
