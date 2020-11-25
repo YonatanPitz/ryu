@@ -4,7 +4,6 @@ import requests
 import json
 import time
 import argparse
-import os
 import socket
 from datetime import datetime, timedelta
 
@@ -128,25 +127,30 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.file is not None:
-        with open(os.path.join(args.file)) as f:
-	#with open(args.file) as f:
+        with open(args.file) as f:
             config = json.load(f)
     else:
         print("Configuration file path was not given")
         sys.exit()
 
+
+    print("delay",args.delay)
+
     if args.timestamp is not None:
        begin_time = add_delay_to_timestamp(args.timestamp, args.delay)
     else:
        begin_time = get_timestamp_with_delay(args.delay)
+       print(datetime.now())
        print((datetime.now() + timedelta(seconds=args.delay)).strftime("%H:%M:%S"))
-    print(begin_time)
+    print("begin",begin_time)
     begin_time = socket.htonl(begin_time)
     end_time = 0xffffffff
 
+    print("begin socket" , begin_time)
+    print("end" , end_time)
+
     r = requests.get(rest_url+'stats/switches')
     dpid = int(r.text[1:-1])
-    print (dpid)
 
     for group in config.get('groups'):
         if len(get_groups(dpid, group['group_id'])) != 0:
@@ -167,11 +171,11 @@ if __name__ == '__main__':
         # sys.exit()
 
 
-    flows = config.get('flows')
-    for flow in flows:
-        flow["existing_flows"] = get_flows(dpid, flow, 0)
-        add_fwd_entry(dpid, flow, meta)
-    add_rtp_entry(dpid, begin_time, end_time, meta)
+ #   flows = config.get('flows')
+ #   for flow in flows:
+ #       flow["existing_flows"] = get_flows(dpid, flow, 0)
+ #       add_fwd_entry(dpid, flow, meta)
+ #   add_rtp_entry(dpid, begin_time, end_time, meta)
     # print(flows)
 
     # pkt = 0
@@ -180,17 +184,20 @@ if __name__ == '__main__':
     #     # print('{} packets. {} bytes'.format(pkt, byte))
     #     # time.sleep(1)
     # print('Packets recieved. Switching default flow')
-    time.sleep(args.delay)
-    print("cleanup")
 
-    for flow in flows:
+
+
+#    time.sleep(args.delay-10)
+#    print("cleanup")
+
+#    for flow in flows:
        # print("\n\n")
        # print(flow)
-       del_fwd_entry(dpid, flow, 0)
-       add_fwd_entry(dpid, flow, 0)
+ #      del_fwd_entry(dpid, flow, 0)
+#       add_fwd_entry(dpid, flow, 0)
 
     # time.sleep(10)
-    del_rtp_entry(dpid, begin_time, end_time)
+ #   del_rtp_entry(dpid, begin_time, end_time)
 
-    for flow in flows:
-        del_fwd_entry(dpid, flow, meta)
+  #  for flow in flows:
+   #     del_fwd_entry(dpid, flow, meta)

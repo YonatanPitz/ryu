@@ -19,7 +19,7 @@
     "flows": [
     {
         "match":{
-            "in_port": 20801, 
+            "in_port": 20801,
             "eth_type": 2048,
             "ipv4_dst": "238.20.1.1"
         },
@@ -31,7 +31,7 @@
     },
     {
         "match":{
-            "in_port": 20801, 
+            "in_port": 20801,
             "eth_type": 2048,
             "ipv4_dst": "239.20.1.3"
         },

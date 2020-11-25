@@ -23,11 +23,10 @@
             "eth_type": 2048,
             "ipv4_dst": "238.20.1.1"
         },
-        "new_actions":
-        [{
+        "new_actions": [{
             "type": "GROUP",
-            "group_id": 5
-        }]
+            "group_id": 1
+	}]
     },
     {
         "match":{
@@ -38,7 +37,7 @@
         "new_actions":
         [{
             "type": "GROUP",
-            "group_id": 20
+            "group_id": 5
         }]
     }]
 }
