@@ -15,6 +15,28 @@
                 "port": 20804
             }]
         }]
+    },
+    {
+        "group_id": 21,
+        "type": "ALL",
+        "buckets": [{
+            "actions":[
+            {
+                "type": "OUTPUT",
+                "port": 20804
+            }]
+        }]
+    },
+    {
+        "group_id": 22,
+        "type": "ALL",
+        "buckets": [{
+            "actions":[
+            {
+                "type": "OUTPUT",
+                "port": 20802
+            }]
+        }]
     }],
     "flows": [
     {
@@ -23,10 +45,11 @@
             "eth_type": 2048,
             "ipv4_dst": "238.20.1.1"
         },
-        "new_actions": [{
+        "new_actions": 
+        [{
             "type": "GROUP",
-            "group_id": 1
-	}]
+            "group_id": 21
+        }]
     },
     {
         "match":{
@@ -37,7 +60,7 @@
         "new_actions":
         [{
             "type": "GROUP",
-            "group_id": 5
+            "group_id": 22
         }]
     }]
 }

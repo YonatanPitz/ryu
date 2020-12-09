@@ -45,19 +45,21 @@ def del_rtp_entry(dpid, begin_time, end_time):
     }
     return requests.post(rest_url+'stats/flowentry/delete', data=json.dumps(data))
 
-def add_fwd_entry(dpid, flow, meta):
+def add_fwd_entry(dpid, flow, meta, actions=None):
     for existing_flow in flow["existing_flows"]:
         priority = existing_flow.get("priority", 0)
         match = existing_flow["match"].copy()
         if meta != 0:
             match["metadata"] = "{}/{}".format(meta, 4095)
             priority += 1
+        if actions is None:
+            actions = flow["new_actions"]
         data = {
             "dpid":     dpid,
             "table_id": 0,
             "priority": priority,
             "match":    match,
-            "actions":  flow["new_actions"] 
+            "actions":  actions
         }
         print(data)
         requests.post(rest_url+'stats/flowentry/add', data=json.dumps(data))
@@ -129,7 +131,6 @@ if __name__ == '__main__':
 
     if args.file is not None:
         with open(os.path.join(args.file)) as f:
-	#with open(args.file) as f:
             config = json.load(f)
     else:
         print("Configuration file path was not given")
@@ -155,41 +156,25 @@ if __name__ == '__main__':
             add_group(dpid, group)
     meta = 1
 
-    # if args.default:
-    #     del_fwd_entry(dpid, new_flow, 0)
-    #     del_fwd_entry(dpid, new_flow, meta)
-    #     del_fwd_entry(dpid, old_flow, 0)
-    #     del_fwd_entry(dpid, old_flow, meta)
-    #     del_rtp_entry(dpid, begin_time, end_time)
-    #     add_fwd_entry(dpid, old_flow, 0, 0)
-        # for group in config.get('groups'):
-        #     del_group(dpid, group)
-        # sys.exit()
-
-
     flows = config.get('flows')
     for flow in flows:
         flow["existing_flows"] = get_flows(dpid, flow, 0)
+        # Yonatanp new - If doesn't have flows currently, create a new one
+        if not flow["existing_flows"]:
+            flow["existing_flows"].append({})
+            flow["existing_flows"][0]["match"] = flow["match"].copy()
+            add_fwd_entry(dpid, flow, 0, actions=flow["old_actions"])
         add_fwd_entry(dpid, flow, meta)
     add_rtp_entry(dpid, begin_time, end_time, meta)
     # print(flows)
 
-    # pkt = 0
-    # while pkt == 0:
-    #     pkt, byte = get_flow_stats(dpid, new_flow, meta)
-    #     # print('{} packets. {} bytes'.format(pkt, byte))
-    #     # time.sleep(1)
-    # print('Packets recieved. Switching default flow')
     time.sleep(args.delay)
     print("cleanup")
 
     for flow in flows:
-       # print("\n\n")
-       # print(flow)
        del_fwd_entry(dpid, flow, 0)
        add_fwd_entry(dpid, flow, 0)
 
-    # time.sleep(10)
     del_rtp_entry(dpid, begin_time, end_time)
 
     for flow in flows:

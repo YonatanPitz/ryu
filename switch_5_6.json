@@ -15,6 +15,28 @@
                 "port": 20804
             }]
         }]
+    },
+    {
+        "group_id": 21,
+        "type": "ALL",
+        "buckets": [{
+            "actions":[
+            {
+                "type": "OUTPUT",
+                "port": 20804
+            }]
+        }]
+    },
+    {
+        "group_id": 22,
+        "type": "ALL",
+        "buckets": [{
+            "actions":[
+            {
+                "type": "OUTPUT",
+                "port": 20802
+            }]
+        }]
     }],
     "flows": [
     {
@@ -26,7 +48,12 @@
         "new_actions":
         [{
             "type": "GROUP",
-            "group_id": 5
+            "group_id": 22
+        }],
+        "old_actions":
+        [{
+            "type": "GROUP",
+            "group_id": 21
         }]
     },
     {
@@ -39,6 +66,11 @@
         [{
             "type": "GROUP",
             "group_id": 20
+        }],
+        "old_actions":
+        [{
+            "type": "GROUP",
+            "group_id": 22
         }]
     }]
 }
